@@ -35,9 +35,13 @@ bearer_token = "My Bearer Token"
 def client(request: FixtureRequest) -> Iterator[Paymaxis]:
     strict = getattr(request, "param", True)
     if not isinstance(strict, bool):
-        raise TypeError(f"Unexpected fixture parameter type {type(strict)}, expected {bool}")
+        raise TypeError(
+            f"Unexpected fixture parameter type {type(strict)}, expected {bool}"
+        )
 
-    with Paymaxis(base_url=base_url, bearer_token=bearer_token, _strict_response_validation=strict) as client:
+    with Paymaxis(
+        base_url=base_url, bearer_token=bearer_token, _strict_response_validation=strict
+    ) as client:
         yield client
 
 
@@ -45,7 +49,9 @@ def client(request: FixtureRequest) -> Iterator[Paymaxis]:
 async def async_client(request: FixtureRequest) -> AsyncIterator[AsyncPaymaxis]:
     strict = getattr(request, "param", True)
     if not isinstance(strict, bool):
-        raise TypeError(f"Unexpected fixture parameter type {type(strict)}, expected {bool}")
+        raise TypeError(
+            f"Unexpected fixture parameter type {type(strict)}, expected {bool}"
+        )
 
     async with AsyncPaymaxis(
         base_url=base_url, bearer_token=bearer_token, _strict_response_validation=strict

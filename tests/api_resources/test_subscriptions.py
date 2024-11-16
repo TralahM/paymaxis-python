@@ -15,7 +15,9 @@ base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 
 
 class TestSubscriptions:
-    parametrize = pytest.mark.parametrize("client", [False, True], indirect=True, ids=["loose", "strict"])
+    parametrize = pytest.mark.parametrize(
+        "client", [False, True], indirect=True, ids=["loose", "strict"]
+    )
 
     @parametrize
     def test_method_retrieve(self, client: Paymaxis) -> None:
@@ -50,7 +52,9 @@ class TestSubscriptions:
 
     @parametrize
     def test_path_params_retrieve(self, client: Paymaxis) -> None:
-        with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
+        with pytest.raises(
+            ValueError, match=r"Expected a non-empty value for `id` but received ''"
+        ):
             client.subscriptions.with_raw_response.retrieve(
                 "",
             )
@@ -96,14 +100,18 @@ class TestSubscriptions:
 
     @parametrize
     def test_path_params_update(self, client: Paymaxis) -> None:
-        with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
+        with pytest.raises(
+            ValueError, match=r"Expected a non-empty value for `id` but received ''"
+        ):
             client.subscriptions.with_raw_response.update(
                 id="",
             )
 
 
 class TestAsyncSubscriptions:
-    parametrize = pytest.mark.parametrize("async_client", [False, True], indirect=True, ids=["loose", "strict"])
+    parametrize = pytest.mark.parametrize(
+        "async_client", [False, True], indirect=True, ids=["loose", "strict"]
+    )
 
     @parametrize
     async def test_method_retrieve(self, async_client: AsyncPaymaxis) -> None:
@@ -124,7 +132,9 @@ class TestAsyncSubscriptions:
         assert_matches_type(Subscription, subscription, path=["response"])
 
     @parametrize
-    async def test_streaming_response_retrieve(self, async_client: AsyncPaymaxis) -> None:
+    async def test_streaming_response_retrieve(
+        self, async_client: AsyncPaymaxis
+    ) -> None:
         async with async_client.subscriptions.with_streaming_response.retrieve(
             "id",
         ) as response:
@@ -138,7 +148,9 @@ class TestAsyncSubscriptions:
 
     @parametrize
     async def test_path_params_retrieve(self, async_client: AsyncPaymaxis) -> None:
-        with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
+        with pytest.raises(
+            ValueError, match=r"Expected a non-empty value for `id` but received ''"
+        ):
             await async_client.subscriptions.with_raw_response.retrieve(
                 "",
             )
@@ -151,7 +163,9 @@ class TestAsyncSubscriptions:
         assert_matches_type(Subscription, subscription, path=["response"])
 
     @parametrize
-    async def test_method_update_with_all_params(self, async_client: AsyncPaymaxis) -> None:
+    async def test_method_update_with_all_params(
+        self, async_client: AsyncPaymaxis
+    ) -> None:
         subscription = await async_client.subscriptions.update(
             id="id",
             state="CANCELLED",
@@ -184,7 +198,9 @@ class TestAsyncSubscriptions:
 
     @parametrize
     async def test_path_params_update(self, async_client: AsyncPaymaxis) -> None:
-        with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
+        with pytest.raises(
+            ValueError, match=r"Expected a non-empty value for `id` but received ''"
+        ):
             await async_client.subscriptions.with_raw_response.update(
                 id="",
             )
