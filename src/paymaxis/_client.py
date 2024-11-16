@@ -46,8 +46,8 @@ __all__ = [
 ]
 
 ENVIRONMENTS: Dict[str, str] = {
-    "production": "https://app-sandbox.paymaxis.com",
-    "environment_1": "https://app.paymaxis.com",
+    "sandbox": "https://app-sandbox.paymaxis.com",
+    "production": "https://app.paymaxis.com",
 }
 
 
@@ -60,13 +60,13 @@ class Paymaxis(SyncAPIClient):
     # client options
     bearer_token: str
 
-    _environment: Literal["production", "environment_1"] | NotGiven
+    _environment: Literal["sandbox", "production"] | NotGiven
 
     def __init__(
         self,
         *,
         bearer_token: str | None = None,
-        environment: Literal["production", "environment_1"] | NotGiven = NOT_GIVEN,
+        environment: Literal["sandbox", "production"] | NotGiven = NOT_GIVEN,
         base_url: str | httpx.URL | None | NotGiven = NOT_GIVEN,
         timeout: Union[float, Timeout, None, NotGiven] = NOT_GIVEN,
         max_retries: int = DEFAULT_MAX_RETRIES,
@@ -88,13 +88,13 @@ class Paymaxis(SyncAPIClient):
     ) -> None:
         """Construct a new synchronous paymaxis client instance.
 
-        This automatically infers the `bearer_token` argument from the `BEARER_TOKEN` environment variable if it is not provided.
+        This automatically infers the `bearer_token` argument from the `PAYMAXIS_API_KEY` environment variable if it is not provided.
         """
         if bearer_token is None:
-            bearer_token = os.environ.get("BEARER_TOKEN")
+            bearer_token = os.environ.get("PAYMAXIS_API_KEY")
         if bearer_token is None:
             raise PaymaxisError(
-                "The bearer_token client option must be set either by passing bearer_token to the client or by setting the BEARER_TOKEN environment variable"
+                "The bearer_token client option must be set either by passing bearer_token to the client or by setting the PAYMAXIS_API_KEY environment variable"
             )
         self.bearer_token = bearer_token
 
@@ -117,7 +117,7 @@ class Paymaxis(SyncAPIClient):
         elif base_url_env is not None:
             base_url = base_url_env
         else:
-            self._environment = environment = "production"
+            self._environment = environment = "sandbox"
 
             try:
                 base_url = ENVIRONMENTS[environment]
@@ -164,7 +164,7 @@ class Paymaxis(SyncAPIClient):
         self,
         *,
         bearer_token: str | None = None,
-        environment: Literal["production", "environment_1"] | None = None,
+        environment: Literal["sandbox", "production"] | None = None,
         base_url: str | httpx.URL | None = None,
         timeout: float | Timeout | None | NotGiven = NOT_GIVEN,
         http_client: httpx.Client | None = None,
@@ -256,13 +256,13 @@ class AsyncPaymaxis(AsyncAPIClient):
     # client options
     bearer_token: str
 
-    _environment: Literal["production", "environment_1"] | NotGiven
+    _environment: Literal["sandbox", "production"] | NotGiven
 
     def __init__(
         self,
         *,
         bearer_token: str | None = None,
-        environment: Literal["production", "environment_1"] | NotGiven = NOT_GIVEN,
+        environment: Literal["sandbox", "production"] | NotGiven = NOT_GIVEN,
         base_url: str | httpx.URL | None | NotGiven = NOT_GIVEN,
         timeout: Union[float, Timeout, None, NotGiven] = NOT_GIVEN,
         max_retries: int = DEFAULT_MAX_RETRIES,
@@ -284,13 +284,13 @@ class AsyncPaymaxis(AsyncAPIClient):
     ) -> None:
         """Construct a new async paymaxis client instance.
 
-        This automatically infers the `bearer_token` argument from the `BEARER_TOKEN` environment variable if it is not provided.
+        This automatically infers the `bearer_token` argument from the `PAYMAXIS_API_KEY` environment variable if it is not provided.
         """
         if bearer_token is None:
-            bearer_token = os.environ.get("BEARER_TOKEN")
+            bearer_token = os.environ.get("PAYMAXIS_API_KEY")
         if bearer_token is None:
             raise PaymaxisError(
-                "The bearer_token client option must be set either by passing bearer_token to the client or by setting the BEARER_TOKEN environment variable"
+                "The bearer_token client option must be set either by passing bearer_token to the client or by setting the PAYMAXIS_API_KEY environment variable"
             )
         self.bearer_token = bearer_token
 
@@ -313,7 +313,7 @@ class AsyncPaymaxis(AsyncAPIClient):
         elif base_url_env is not None:
             base_url = base_url_env
         else:
-            self._environment = environment = "production"
+            self._environment = environment = "sandbox"
 
             try:
                 base_url = ENVIRONMENTS[environment]
@@ -360,7 +360,7 @@ class AsyncPaymaxis(AsyncAPIClient):
         self,
         *,
         bearer_token: str | None = None,
-        environment: Literal["production", "environment_1"] | None = None,
+        environment: Literal["sandbox", "production"] | None = None,
         base_url: str | httpx.URL | None = None,
         timeout: float | Timeout | None | NotGiven = NOT_GIVEN,
         http_client: httpx.AsyncClient | None = None,
