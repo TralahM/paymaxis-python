@@ -88,13 +88,13 @@ class Paymaxis(SyncAPIClient):
     ) -> None:
         """Construct a new synchronous paymaxis client instance.
 
-        This automatically infers the `bearer_token` argument from the `BEARER_TOKEN` environment variable if it is not provided.
+        This automatically infers the `bearer_token` argument from the `PAYMAXIS_API_KEY` environment variable if it is not provided.
         """
         if bearer_token is None:
-            bearer_token = os.environ.get("BEARER_TOKEN")
+            bearer_token = os.environ.get("PAYMAXIS_API_KEY")
         if bearer_token is None:
             raise PaymaxisError(
-                "The bearer_token client option must be set either by passing bearer_token to the client or by setting the BEARER_TOKEN environment variable"
+                "The bearer_token client option must be set either by passing bearer_token to the client or by setting the PAYMAXIS_API_KEY environment variable"
             )
         self.bearer_token = bearer_token
 
@@ -284,13 +284,13 @@ class AsyncPaymaxis(AsyncAPIClient):
     ) -> None:
         """Construct a new async paymaxis client instance.
 
-        This automatically infers the `bearer_token` argument from the `BEARER_TOKEN` environment variable if it is not provided.
+        This automatically infers the `bearer_token` argument from the `PAYMAXIS_API_KEY` environment variable if it is not provided.
         """
         if bearer_token is None:
-            bearer_token = os.environ.get("BEARER_TOKEN")
+            bearer_token = os.environ.get("PAYMAXIS_API_KEY")
         if bearer_token is None:
             raise PaymaxisError(
-                "The bearer_token client option must be set either by passing bearer_token to the client or by setting the BEARER_TOKEN environment variable"
+                "The bearer_token client option must be set either by passing bearer_token to the client or by setting the PAYMAXIS_API_KEY environment variable"
             )
         self.bearer_token = bearer_token
 
