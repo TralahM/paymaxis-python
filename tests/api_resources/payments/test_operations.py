@@ -20,14 +20,14 @@ class TestOperations:
     @parametrize
     def test_method_list(self, client: Paymaxis) -> None:
         operation = client.payments.operations.list(
-            "id",
+            "id"*16,
         )
         assert_matches_type(Operation, operation, path=["response"])
 
     @parametrize
     def test_raw_response_list(self, client: Paymaxis) -> None:
         response = client.payments.operations.with_raw_response.list(
-            "id",
+            "id"*16,
         )
 
         assert response.is_closed is True
@@ -38,7 +38,7 @@ class TestOperations:
     @parametrize
     def test_streaming_response_list(self, client: Paymaxis) -> None:
         with client.payments.operations.with_streaming_response.list(
-            "id",
+            "id"*16,
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -62,14 +62,14 @@ class TestAsyncOperations:
     @parametrize
     async def test_method_list(self, async_client: AsyncPaymaxis) -> None:
         operation = await async_client.payments.operations.list(
-            "id",
+            "id"*16,
         )
         assert_matches_type(Operation, operation, path=["response"])
 
     @parametrize
     async def test_raw_response_list(self, async_client: AsyncPaymaxis) -> None:
         response = await async_client.payments.operations.with_raw_response.list(
-            "id",
+            "id"*16,
         )
 
         assert response.is_closed is True
@@ -80,7 +80,7 @@ class TestAsyncOperations:
     @parametrize
     async def test_streaming_response_list(self, async_client: AsyncPaymaxis) -> None:
         async with async_client.payments.operations.with_streaming_response.list(
-            "id",
+            "id"*16,
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
