@@ -103,7 +103,9 @@ class Paymaxis(SyncAPIClient):
         base_url_env = os.environ.get("PAYMAXIS_BASE_URL")
         if is_given(base_url) and base_url is not None:
             # cast required because mypy doesn't understand the type narrowing
-            base_url = cast("str | httpx.URL", base_url)  # pyright: ignore[reportUnnecessaryCast]
+            base_url = cast(
+                "str | httpx.URL", base_url
+            )  # pyright: ignore[reportUnnecessaryCast]
         elif is_given(environment):
             if base_url_env and base_url is not None:
                 raise ValueError(
@@ -179,10 +181,14 @@ class Paymaxis(SyncAPIClient):
         Create a new client instance re-using the same options given to the current client with optional overriding.
         """
         if default_headers is not None and set_default_headers is not None:
-            raise ValueError("The `default_headers` and `set_default_headers` arguments are mutually exclusive")
+            raise ValueError(
+                "The `default_headers` and `set_default_headers` arguments are mutually exclusive"
+            )
 
         if default_query is not None and set_default_query is not None:
-            raise ValueError("The `default_query` and `set_default_query` arguments are mutually exclusive")
+            raise ValueError(
+                "The `default_query` and `set_default_query` arguments are mutually exclusive"
+            )
 
         headers = self._custom_headers
         if default_headers is not None:
@@ -225,10 +231,14 @@ class Paymaxis(SyncAPIClient):
             return _exceptions.BadRequestError(err_msg, response=response, body=body)
 
         if response.status_code == 401:
-            return _exceptions.AuthenticationError(err_msg, response=response, body=body)
+            return _exceptions.AuthenticationError(
+                err_msg, response=response, body=body
+            )
 
         if response.status_code == 403:
-            return _exceptions.PermissionDeniedError(err_msg, response=response, body=body)
+            return _exceptions.PermissionDeniedError(
+                err_msg, response=response, body=body
+            )
 
         if response.status_code == 404:
             return _exceptions.NotFoundError(err_msg, response=response, body=body)
@@ -237,13 +247,17 @@ class Paymaxis(SyncAPIClient):
             return _exceptions.ConflictError(err_msg, response=response, body=body)
 
         if response.status_code == 422:
-            return _exceptions.UnprocessableEntityError(err_msg, response=response, body=body)
+            return _exceptions.UnprocessableEntityError(
+                err_msg, response=response, body=body
+            )
 
         if response.status_code == 429:
             return _exceptions.RateLimitError(err_msg, response=response, body=body)
 
         if response.status_code >= 500:
-            return _exceptions.InternalServerError(err_msg, response=response, body=body)
+            return _exceptions.InternalServerError(
+                err_msg, response=response, body=body
+            )
         return APIStatusError(err_msg, response=response, body=body)
 
 
@@ -299,7 +313,9 @@ class AsyncPaymaxis(AsyncAPIClient):
         base_url_env = os.environ.get("PAYMAXIS_BASE_URL")
         if is_given(base_url) and base_url is not None:
             # cast required because mypy doesn't understand the type narrowing
-            base_url = cast("str | httpx.URL", base_url)  # pyright: ignore[reportUnnecessaryCast]
+            base_url = cast(
+                "str | httpx.URL", base_url
+            )  # pyright: ignore[reportUnnecessaryCast]
         elif is_given(environment):
             if base_url_env and base_url is not None:
                 raise ValueError(
@@ -375,10 +391,14 @@ class AsyncPaymaxis(AsyncAPIClient):
         Create a new client instance re-using the same options given to the current client with optional overriding.
         """
         if default_headers is not None and set_default_headers is not None:
-            raise ValueError("The `default_headers` and `set_default_headers` arguments are mutually exclusive")
+            raise ValueError(
+                "The `default_headers` and `set_default_headers` arguments are mutually exclusive"
+            )
 
         if default_query is not None and set_default_query is not None:
-            raise ValueError("The `default_query` and `set_default_query` arguments are mutually exclusive")
+            raise ValueError(
+                "The `default_query` and `set_default_query` arguments are mutually exclusive"
+            )
 
         headers = self._custom_headers
         if default_headers is not None:
@@ -421,10 +441,14 @@ class AsyncPaymaxis(AsyncAPIClient):
             return _exceptions.BadRequestError(err_msg, response=response, body=body)
 
         if response.status_code == 401:
-            return _exceptions.AuthenticationError(err_msg, response=response, body=body)
+            return _exceptions.AuthenticationError(
+                err_msg, response=response, body=body
+            )
 
         if response.status_code == 403:
-            return _exceptions.PermissionDeniedError(err_msg, response=response, body=body)
+            return _exceptions.PermissionDeniedError(
+                err_msg, response=response, body=body
+            )
 
         if response.status_code == 404:
             return _exceptions.NotFoundError(err_msg, response=response, body=body)
@@ -433,38 +457,52 @@ class AsyncPaymaxis(AsyncAPIClient):
             return _exceptions.ConflictError(err_msg, response=response, body=body)
 
         if response.status_code == 422:
-            return _exceptions.UnprocessableEntityError(err_msg, response=response, body=body)
+            return _exceptions.UnprocessableEntityError(
+                err_msg, response=response, body=body
+            )
 
         if response.status_code == 429:
             return _exceptions.RateLimitError(err_msg, response=response, body=body)
 
         if response.status_code >= 500:
-            return _exceptions.InternalServerError(err_msg, response=response, body=body)
+            return _exceptions.InternalServerError(
+                err_msg, response=response, body=body
+            )
         return APIStatusError(err_msg, response=response, body=body)
 
 
 class PaymaxisWithRawResponse:
     def __init__(self, client: Paymaxis) -> None:
         self.payments = resources.PaymentsResourceWithRawResponse(client.payments)
-        self.subscriptions = resources.SubscriptionsResourceWithRawResponse(client.subscriptions)
+        self.subscriptions = resources.SubscriptionsResourceWithRawResponse(
+            client.subscriptions
+        )
 
 
 class AsyncPaymaxisWithRawResponse:
     def __init__(self, client: AsyncPaymaxis) -> None:
         self.payments = resources.AsyncPaymentsResourceWithRawResponse(client.payments)
-        self.subscriptions = resources.AsyncSubscriptionsResourceWithRawResponse(client.subscriptions)
+        self.subscriptions = resources.AsyncSubscriptionsResourceWithRawResponse(
+            client.subscriptions
+        )
 
 
 class PaymaxisWithStreamedResponse:
     def __init__(self, client: Paymaxis) -> None:
         self.payments = resources.PaymentsResourceWithStreamingResponse(client.payments)
-        self.subscriptions = resources.SubscriptionsResourceWithStreamingResponse(client.subscriptions)
+        self.subscriptions = resources.SubscriptionsResourceWithStreamingResponse(
+            client.subscriptions
+        )
 
 
 class AsyncPaymaxisWithStreamedResponse:
     def __init__(self, client: AsyncPaymaxis) -> None:
-        self.payments = resources.AsyncPaymentsResourceWithStreamingResponse(client.payments)
-        self.subscriptions = resources.AsyncSubscriptionsResourceWithStreamingResponse(client.subscriptions)
+        self.payments = resources.AsyncPaymentsResourceWithStreamingResponse(
+            client.payments
+        )
+        self.subscriptions = resources.AsyncSubscriptionsResourceWithStreamingResponse(
+            client.subscriptions
+        )
 
 
 Client = Paymaxis

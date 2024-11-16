@@ -17,9 +17,9 @@ class ResultCycle(BaseModel):
     payment_id: Optional[str] = FieldInfo(alias="paymentId", default=None)
     """Payment Id"""
 
-    payment_state: Optional[Literal["CHECKOUT", "PENDING", "CANCELLED", "DECLINED", "COMPLETED"]] = FieldInfo(
-        alias="paymentState", default=None
-    )
+    payment_state: Optional[
+        Literal["CHECKOUT", "PENDING", "CANCELLED", "DECLINED", "COMPLETED"]
+    ] = FieldInfo(alias="paymentState", default=None)
     """Payment State"""
 
     sequence: Optional[int] = None
@@ -45,13 +45,17 @@ class ResultRetryStrategy(BaseModel):
     number_of_cycles: int = FieldInfo(alias="numberOfCycles")
     """Required number of retries"""
 
-    amount_adjustments: Optional[List[int]] = FieldInfo(alias="amountAdjustments", default=None)
+    amount_adjustments: Optional[List[int]] = FieldInfo(
+        alias="amountAdjustments", default=None
+    )
     """
     If specified, the nth element contains the percentage of the initial amount that
     will be charged for the nth retry
     """
 
-    frequency_unit: Optional[Literal["MINUTE", "DAY", "WEEK", "MONTH"]] = FieldInfo(alias="frequencyUnit", default=None)
+    frequency_unit: Optional[Literal["MINUTE", "DAY", "WEEK", "MONTH"]] = FieldInfo(
+        alias="frequencyUnit", default=None
+    )
     """The interval at which the subscription is retried.
 
     Use 'MINUTE' for testing purposes only.
@@ -71,7 +75,9 @@ class Result(BaseModel):
     currency: Optional[str] = None
     """Payment currency"""
 
-    customer_reference_id: Optional[str] = FieldInfo(alias="customerReferenceId", default=None)
+    customer_reference_id: Optional[str] = FieldInfo(
+        alias="customerReferenceId", default=None
+    )
     """Id of the customer from initial payment"""
 
     cycles: Optional[List[ResultCycle]] = None
@@ -87,7 +93,9 @@ class Result(BaseModel):
     subscription is billed once every two days.
     """
 
-    frequency_unit: Optional[Literal["MINUTE", "DAY", "WEEK", "MONTH"]] = FieldInfo(alias="frequencyUnit", default=None)
+    frequency_unit: Optional[Literal["MINUTE", "DAY", "WEEK", "MONTH"]] = FieldInfo(
+        alias="frequencyUnit", default=None
+    )
     """The interval at which the subscription is billed.
 
     Use 'MINUTE' for testing purposes only.
@@ -96,13 +104,17 @@ class Result(BaseModel):
     recurring_token: Optional[str] = FieldInfo(alias="recurringToken", default=None)
     """Token that is used to continue the recurring chain"""
 
-    requested_number_of_cycles: Optional[int] = FieldInfo(alias="requestedNumberOfCycles", default=None)
+    requested_number_of_cycles: Optional[int] = FieldInfo(
+        alias="requestedNumberOfCycles", default=None
+    )
     """Required number of subsequent recurring payments.
 
     Unlimited if value is not specified.
     """
 
-    retry_strategy: Optional[ResultRetryStrategy] = FieldInfo(alias="retryStrategy", default=None)
+    retry_strategy: Optional[ResultRetryStrategy] = FieldInfo(
+        alias="retryStrategy", default=None
+    )
     """Retry strategy for subscription.
 
     If not specified, the subscription is canceled after the first failed payment
