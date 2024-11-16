@@ -15,12 +15,9 @@ The REST API documentation can be found on [docs.paymaxis.com](https://docs.paym
 ## Installation
 
 ```sh
-# install from the production repo
-pip install git+ssh://git@github.com/TralahM/paymaxis-python.git
+# install from PyPI
+pip install --pre paymaxis
 ```
-
-> [!NOTE]
-> Once this package is [published to PyPI](https://app.stainlessapi.com/docs/guides/publish), this will become: `pip install --pre paymaxis`
 
 ## Usage
 
