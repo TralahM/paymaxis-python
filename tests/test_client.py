@@ -558,10 +558,10 @@ class TestPaymaxis:
         # explicit environment arg requires explicitness
         with update_env(PAYMAXIS_BASE_URL="http://localhost:5000/from/env"):
             with pytest.raises(ValueError, match=r"you must pass base_url=None"):
-                Paymaxis(bearer_token=bearer_token, _strict_response_validation=True, environment="production")
+                Paymaxis(bearer_token=bearer_token, _strict_response_validation=True, environment="sandbox")
 
             client = Paymaxis(
-                base_url=None, bearer_token=bearer_token, _strict_response_validation=True, environment="production"
+                base_url=None, bearer_token=bearer_token, _strict_response_validation=True, environment="sandbox"
             )
             assert str(client.base_url).startswith("https://app-sandbox.paymaxis.com")
 
@@ -1352,10 +1352,10 @@ class TestAsyncPaymaxis:
         # explicit environment arg requires explicitness
         with update_env(PAYMAXIS_BASE_URL="http://localhost:5000/from/env"):
             with pytest.raises(ValueError, match=r"you must pass base_url=None"):
-                AsyncPaymaxis(bearer_token=bearer_token, _strict_response_validation=True, environment="production")
+                AsyncPaymaxis(bearer_token=bearer_token, _strict_response_validation=True, environment="sandbox")
 
             client = AsyncPaymaxis(
-                base_url=None, bearer_token=bearer_token, _strict_response_validation=True, environment="production"
+                base_url=None, bearer_token=bearer_token, _strict_response_validation=True, environment="sandbox"
             )
             assert str(client.base_url).startswith("https://app-sandbox.paymaxis.com")
 

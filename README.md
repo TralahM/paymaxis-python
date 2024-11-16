@@ -27,8 +27,8 @@ The full API of this library can be found in [api.md](api.md).
 from paymaxis import Paymaxis
 
 client = Paymaxis(
-    # defaults to "production".
-    environment="environment_1",
+    # defaults to "sandbox".
+    environment="production",
 )
 
 payment = client.payments.create(
@@ -52,8 +52,8 @@ import asyncio
 from paymaxis import AsyncPaymaxis
 
 client = AsyncPaymaxis(
-    # defaults to "production".
-    environment="environment_1",
+    # defaults to "sandbox".
+    environment="production",
 )
 
 
