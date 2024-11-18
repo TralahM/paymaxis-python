@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.1.0-alpha.3 (2024-11-18)
+
+Full Changelog: [v0.1.0-alpha.2...v0.1.0-alpha.3](https://github.com/TralahM/paymaxis-python/compare/v0.1.0-alpha.2...v0.1.0-alpha.3)
+
+### Features
+
+* **api:** update via SDK Studio ([#8](https://github.com/TralahM/paymaxis-python/issues/8)) ([70540bc](https://github.com/TralahM/paymaxis-python/commit/70540bcfa6cfcf998f862e02c12ed19498ab3d5b))
+
 ## 0.1.0-alpha.2 (2024-11-18)
 
 Full Changelog: [v0.1.0-alpha.1...v0.1.0-alpha.2](https://github.com/TralahM/paymaxis-python/compare/v0.1.0-alpha.1...v0.1.0-alpha.2)
