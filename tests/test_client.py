@@ -741,7 +741,16 @@ class TestPaymaxis:
         with pytest.raises(APITimeoutError):
             self.client.post(
                 "/api/v1/payments",
-                body=cast(object, dict(currency="EUR", payment_type="DEPOSIT")),
+                body=cast(
+                    object,
+                    dict(
+                        currency="EUR",
+                        payment_type="DEPOSIT",
+                        amount=4000,
+                        payment_method="BASIC_CARD",
+                        start_recurring=True,
+                    ),
+                ),
                 cast_to=httpx.Response,
                 options={"headers": {RAW_RESPONSE_HEADER: "stream"}},
             )
@@ -756,7 +765,16 @@ class TestPaymaxis:
         with pytest.raises(APIStatusError):
             self.client.post(
                 "/api/v1/payments",
-                body=cast(object, dict(currency="EUR", payment_type="DEPOSIT")),
+                body=cast(
+                    object,
+                    dict(
+                        currency="EUR",
+                        payment_type="DEPOSIT",
+                        amount=4000,
+                        payment_method="BASIC_CARD",
+                        start_recurring=True,
+                    ),
+                ),
                 cast_to=httpx.Response,
                 options={"headers": {RAW_RESPONSE_HEADER: "stream"}},
             )
@@ -1539,7 +1557,16 @@ class TestAsyncPaymaxis:
         with pytest.raises(APITimeoutError):
             await self.client.post(
                 "/api/v1/payments",
-                body=cast(object, dict(currency="EUR", payment_type="DEPOSIT")),
+                body=cast(
+                    object,
+                    dict(
+                        currency="EUR",
+                        payment_type="DEPOSIT",
+                        amount=4000,
+                        payment_method="BASIC_CARD",
+                        start_recurring=True,
+                    ),
+                ),
                 cast_to=httpx.Response,
                 options={"headers": {RAW_RESPONSE_HEADER: "stream"}},
             )
@@ -1554,7 +1581,16 @@ class TestAsyncPaymaxis:
         with pytest.raises(APIStatusError):
             await self.client.post(
                 "/api/v1/payments",
-                body=cast(object, dict(currency="EUR", payment_type="DEPOSIT")),
+                body=cast(
+                    object,
+                    dict(
+                        currency="EUR",
+                        payment_type="DEPOSIT",
+                        amount=4000,
+                        payment_method="BASIC_CARD",
+                        start_recurring=True,
+                    ),
+                ),
                 cast_to=httpx.Response,
                 options={"headers": {RAW_RESPONSE_HEADER: "stream"}},
             )

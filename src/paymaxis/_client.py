@@ -143,7 +143,7 @@ class Paymaxis(SyncAPIClient):
     @property
     @override
     def qs(self) -> Querystring:
-        return Querystring(array_format="comma")
+        return Querystring(nested_format="dots", array_format="comma")
 
     @property
     @override
@@ -339,7 +339,7 @@ class AsyncPaymaxis(AsyncAPIClient):
     @property
     @override
     def qs(self) -> Querystring:
-        return Querystring(array_format="comma")
+        return Querystring(nested_format="dots", array_format="comma")
 
     @property
     @override

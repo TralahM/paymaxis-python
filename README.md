@@ -34,6 +34,9 @@ client = Paymaxis(
 payment = client.payments.create(
     currency="EUR",
     payment_type="DEPOSIT",
+    amount=4000,
+    payment_method="BASIC_CARD",
+    start_recurring=True,
 )
 print(payment.result)
 ```
@@ -61,6 +64,9 @@ async def main() -> None:
     payment = await client.payments.create(
         currency="EUR",
         payment_type="DEPOSIT",
+        amount=4000,
+        payment_method="BASIC_CARD",
+        start_recurring=True,
     )
     print(payment.result)
 
@@ -98,6 +104,9 @@ try:
     client.payments.create(
         currency="EUR",
         payment_type="DEPOSIT",
+        amount=4000,
+        payment_method="BASIC_CARD",
+        start_recurring=True,
     )
 except paymaxis.APIConnectionError as e:
     print("The server could not be reached")
@@ -144,6 +153,9 @@ client = Paymaxis(
 client.with_options(max_retries=5).payments.create(
     currency="EUR",
     payment_type="DEPOSIT",
+    amount=4000,
+    payment_method="BASIC_CARD",
+    start_recurring=True,
 )
 ```
 
@@ -170,6 +182,9 @@ client = Paymaxis(
 client.with_options(timeout=5.0).payments.create(
     currency="EUR",
     payment_type="DEPOSIT",
+    amount=4000,
+    payment_method="BASIC_CARD",
+    start_recurring=True,
 )
 ```
 
@@ -212,6 +227,9 @@ client = Paymaxis()
 response = client.payments.with_raw_response.create(
     currency="EUR",
     payment_type="DEPOSIT",
+    amount=4000,
+    payment_method="BASIC_CARD",
+    start_recurring=True,
 )
 print(response.headers.get('X-My-Header'))
 
@@ -233,6 +251,9 @@ To stream the response body, use `.with_streaming_response` instead, which requi
 with client.payments.with_streaming_response.create(
     currency="EUR",
     payment_type="DEPOSIT",
+    amount=4000,
+    payment_method="BASIC_CARD",
+    start_recurring=True,
 ) as response:
     print(response.headers.get("X-My-Header"))
 
