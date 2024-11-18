@@ -92,7 +92,7 @@ class TestPayments:
                 "retry_strategy": {
                     "frequency": 2,
                     "number_of_cycles": 12,
-                    "amount_adjustments": [1, 1, 1],
+                    "amount_adjustments": [1],
                     "frequency_unit": "MINUTE",
                 },
                 "start_time": "2030-12-25T10:11:12",
@@ -289,7 +289,7 @@ class TestAsyncPayments:
                 "retry_strategy": {
                     "frequency": 2,
                     "number_of_cycles": 12,
-                    "amount_adjustments": [1, 1, 1],
+                    "amount_adjustments": [1],
                     "frequency_unit": "MINUTE",
                 },
                 "start_time": "2030-12-25T10:11:12",
