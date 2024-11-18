@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.1.0-alpha.4 (2024-11-18)
+
+Full Changelog: [v0.1.0-alpha.3...v0.1.0-alpha.4](https://github.com/TralahM/paymaxis-python/compare/v0.1.0-alpha.3...v0.1.0-alpha.4)
+
+### Chores
+
+* rebuild project due to codegen change ([#11](https://github.com/TralahM/paymaxis-python/issues/11)) ([9eb698b](https://github.com/TralahM/paymaxis-python/commit/9eb698bafe6614e3a1020ec5e72d3f6cde9f7687))
+
 ## 0.1.0-alpha.3 (2024-11-18)
 
 Full Changelog: [v0.1.0-alpha.2...v0.1.0-alpha.3](https://github.com/TralahM/paymaxis-python/compare/v0.1.0-alpha.2...v0.1.0-alpha.3)
