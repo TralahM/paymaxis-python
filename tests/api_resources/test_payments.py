@@ -128,14 +128,14 @@ class TestPayments:
     @parametrize
     def test_method_retrieve(self, client: Paymaxis) -> None:
         payment = client.payments.retrieve(
-            "id",
+            "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
         )
         assert_matches_type(Payment, payment, path=["response"])
 
     @parametrize
     def test_raw_response_retrieve(self, client: Paymaxis) -> None:
         response = client.payments.with_raw_response.retrieve(
-            "id",
+            "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
         )
 
         assert response.is_closed is True
@@ -146,7 +146,7 @@ class TestPayments:
     @parametrize
     def test_streaming_response_retrieve(self, client: Paymaxis) -> None:
         with client.payments.with_streaming_response.retrieve(
-            "id",
+            "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -319,14 +319,14 @@ class TestAsyncPayments:
     @parametrize
     async def test_method_retrieve(self, async_client: AsyncPaymaxis) -> None:
         payment = await async_client.payments.retrieve(
-            "id",
+            "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
         )
         assert_matches_type(Payment, payment, path=["response"])
 
     @parametrize
     async def test_raw_response_retrieve(self, async_client: AsyncPaymaxis) -> None:
         response = await async_client.payments.with_raw_response.retrieve(
-            "id",
+            "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
         )
 
         assert response.is_closed is True
@@ -337,7 +337,7 @@ class TestAsyncPayments:
     @parametrize
     async def test_streaming_response_retrieve(self, async_client: AsyncPaymaxis) -> None:
         async with async_client.payments.with_streaming_response.retrieve(
-            "id",
+            "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"

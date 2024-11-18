@@ -20,14 +20,14 @@ class TestSubscriptions:
     @parametrize
     def test_method_retrieve(self, client: Paymaxis) -> None:
         subscription = client.subscriptions.retrieve(
-            "id",
+            "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
         )
         assert_matches_type(Subscription, subscription, path=["response"])
 
     @parametrize
     def test_raw_response_retrieve(self, client: Paymaxis) -> None:
         response = client.subscriptions.with_raw_response.retrieve(
-            "id",
+            "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
         )
 
         assert response.is_closed is True
@@ -38,7 +38,7 @@ class TestSubscriptions:
     @parametrize
     def test_streaming_response_retrieve(self, client: Paymaxis) -> None:
         with client.subscriptions.with_streaming_response.retrieve(
-            "id",
+            "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -58,14 +58,14 @@ class TestSubscriptions:
     @parametrize
     def test_method_update(self, client: Paymaxis) -> None:
         subscription = client.subscriptions.update(
-            id="id",
+            id="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
         )
         assert_matches_type(Subscription, subscription, path=["response"])
 
     @parametrize
     def test_method_update_with_all_params(self, client: Paymaxis) -> None:
         subscription = client.subscriptions.update(
-            id="id",
+            id="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
             state="CANCELLED",
         )
         assert_matches_type(Subscription, subscription, path=["response"])
@@ -73,7 +73,7 @@ class TestSubscriptions:
     @parametrize
     def test_raw_response_update(self, client: Paymaxis) -> None:
         response = client.subscriptions.with_raw_response.update(
-            id="id",
+            id="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
         )
 
         assert response.is_closed is True
@@ -84,7 +84,7 @@ class TestSubscriptions:
     @parametrize
     def test_streaming_response_update(self, client: Paymaxis) -> None:
         with client.subscriptions.with_streaming_response.update(
-            id="id",
+            id="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -108,14 +108,14 @@ class TestAsyncSubscriptions:
     @parametrize
     async def test_method_retrieve(self, async_client: AsyncPaymaxis) -> None:
         subscription = await async_client.subscriptions.retrieve(
-            "id",
+            "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
         )
         assert_matches_type(Subscription, subscription, path=["response"])
 
     @parametrize
     async def test_raw_response_retrieve(self, async_client: AsyncPaymaxis) -> None:
         response = await async_client.subscriptions.with_raw_response.retrieve(
-            "id",
+            "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
         )
 
         assert response.is_closed is True
@@ -126,7 +126,7 @@ class TestAsyncSubscriptions:
     @parametrize
     async def test_streaming_response_retrieve(self, async_client: AsyncPaymaxis) -> None:
         async with async_client.subscriptions.with_streaming_response.retrieve(
-            "id",
+            "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -146,14 +146,14 @@ class TestAsyncSubscriptions:
     @parametrize
     async def test_method_update(self, async_client: AsyncPaymaxis) -> None:
         subscription = await async_client.subscriptions.update(
-            id="id",
+            id="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
         )
         assert_matches_type(Subscription, subscription, path=["response"])
 
     @parametrize
     async def test_method_update_with_all_params(self, async_client: AsyncPaymaxis) -> None:
         subscription = await async_client.subscriptions.update(
-            id="id",
+            id="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
             state="CANCELLED",
         )
         assert_matches_type(Subscription, subscription, path=["response"])
@@ -161,7 +161,7 @@ class TestAsyncSubscriptions:
     @parametrize
     async def test_raw_response_update(self, async_client: AsyncPaymaxis) -> None:
         response = await async_client.subscriptions.with_raw_response.update(
-            id="id",
+            id="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
         )
 
         assert response.is_closed is True
@@ -172,7 +172,7 @@ class TestAsyncSubscriptions:
     @parametrize
     async def test_streaming_response_update(self, async_client: AsyncPaymaxis) -> None:
         async with async_client.subscriptions.with_streaming_response.update(
-            id="id",
+            id="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
