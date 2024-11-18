@@ -74,7 +74,10 @@ class SubscriptionsResource(SyncAPIResource):
         return self._get(
             f"/api/v1/subscriptions/{id}",
             options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
             ),
             cast_to=Subscription,
         )
@@ -109,9 +112,14 @@ class SubscriptionsResource(SyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return self._patch(
             f"/api/v1/subscriptions/{id}",
-            body=maybe_transform({"state": state}, subscription_update_params.SubscriptionUpdateParams),
+            body=maybe_transform(
+                {"state": state}, subscription_update_params.SubscriptionUpdateParams
+            ),
             options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
             ),
             cast_to=Subscription,
         )
@@ -129,7 +137,9 @@ class AsyncSubscriptionsResource(AsyncAPIResource):
         return AsyncSubscriptionsResourceWithRawResponse(self)
 
     @cached_property
-    def with_streaming_response(self) -> AsyncSubscriptionsResourceWithStreamingResponse:
+    def with_streaming_response(
+        self,
+    ) -> AsyncSubscriptionsResourceWithStreamingResponse:
         """
         An alternative to `.with_raw_response` that doesn't eagerly read the response body.
 
@@ -165,7 +175,10 @@ class AsyncSubscriptionsResource(AsyncAPIResource):
         return await self._get(
             f"/api/v1/subscriptions/{id}",
             options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
             ),
             cast_to=Subscription,
         )
@@ -200,9 +213,14 @@ class AsyncSubscriptionsResource(AsyncAPIResource):
             raise ValueError(f"Expected a non-empty value for `id` but received {id!r}")
         return await self._patch(
             f"/api/v1/subscriptions/{id}",
-            body=await async_maybe_transform({"state": state}, subscription_update_params.SubscriptionUpdateParams),
+            body=await async_maybe_transform(
+                {"state": state}, subscription_update_params.SubscriptionUpdateParams
+            ),
             options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
             ),
             cast_to=Subscription,
         )

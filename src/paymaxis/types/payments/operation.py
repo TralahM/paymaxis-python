@@ -45,9 +45,9 @@ class Result(BaseModel):
     outgoing_messages: Optional[str] = FieldInfo(alias="outgoingMessages", default=None)
     """List of messages sent to external APIs during operation processing"""
 
-    payment_state: Optional[Literal["CHECKOUT", "PENDING", "CANCELLED", "DECLINED", "COMPLETED"]] = FieldInfo(
-        alias="paymentState", default=None
-    )
+    payment_state: Optional[
+        Literal["CHECKOUT", "PENDING", "CANCELLED", "DECLINED", "COMPLETED"]
+    ] = FieldInfo(alias="paymentState", default=None)
     """Payment State"""
 
     started: Optional[str] = None

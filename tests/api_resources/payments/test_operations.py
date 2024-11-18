@@ -15,7 +15,9 @@ base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 
 
 class TestOperations:
-    parametrize = pytest.mark.parametrize("client", [False, True], indirect=True, ids=["loose", "strict"])
+    parametrize = pytest.mark.parametrize(
+        "client", [False, True], indirect=True, ids=["loose", "strict"]
+    )
 
     @parametrize
     def test_method_list(self, client: Paymaxis) -> None:
@@ -50,14 +52,18 @@ class TestOperations:
 
     @parametrize
     def test_path_params_list(self, client: Paymaxis) -> None:
-        with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
+        with pytest.raises(
+            ValueError, match=r"Expected a non-empty value for `id` but received ''"
+        ):
             client.payments.operations.with_raw_response.list(
                 "",
             )
 
 
 class TestAsyncOperations:
-    parametrize = pytest.mark.parametrize("async_client", [False, True], indirect=True, ids=["loose", "strict"])
+    parametrize = pytest.mark.parametrize(
+        "async_client", [False, True], indirect=True, ids=["loose", "strict"]
+    )
 
     @parametrize
     async def test_method_list(self, async_client: AsyncPaymaxis) -> None:
@@ -92,7 +98,9 @@ class TestAsyncOperations:
 
     @parametrize
     async def test_path_params_list(self, async_client: AsyncPaymaxis) -> None:
-        with pytest.raises(ValueError, match=r"Expected a non-empty value for `id` but received ''"):
+        with pytest.raises(
+            ValueError, match=r"Expected a non-empty value for `id` but received ''"
+        ):
             await async_client.payments.operations.with_raw_response.list(
                 "",
             )
