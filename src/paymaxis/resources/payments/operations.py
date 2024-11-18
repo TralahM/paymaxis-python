@@ -68,7 +68,10 @@ class OperationsResource(SyncAPIResource):
         return self._get(
             f"/api/v1/payments/{id}/operations",
             options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
             ),
             cast_to=Operation,
         )
@@ -123,7 +126,10 @@ class AsyncOperationsResource(AsyncAPIResource):
         return await self._get(
             f"/api/v1/payments/{id}/operations",
             options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
             ),
             cast_to=Operation,
         )

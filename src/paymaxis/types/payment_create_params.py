@@ -7,17 +7,31 @@ from typing_extensions import Literal, Required, Annotated, TypedDict
 
 from .._utils import PropertyInfo
 
-__all__ = ["PaymentCreateParams", "BillingAddress", "Card", "Customer", "Subscription", "SubscriptionRetryStrategy"]
+__all__ = [
+    "PaymentCreateParams",
+    "BillingAddress",
+    "Card",
+    "Customer",
+    "Subscription",
+    "SubscriptionRetryStrategy",
+]
 
 
 class PaymentCreateParams(TypedDict, total=False):
     currency: Required[str]
     """Payment currency"""
 
-    payment_type: Required[Annotated[Literal["DEPOSIT", "WITHDRAWAL", "REFUND"], PropertyInfo(alias="paymentType")]]
+    payment_type: Required[
+        Annotated[
+            Literal["DEPOSIT", "WITHDRAWAL", "REFUND"],
+            PropertyInfo(alias="paymentType"),
+        ]
+    ]
     """Payment Type"""
 
-    additional_parameters: Annotated[Dict[str, str], PropertyInfo(alias="additionalParameters")]
+    additional_parameters: Annotated[
+        Dict[str, str], PropertyInfo(alias="additionalParameters")
+    ]
     """Additional parameters required by some payment providers.
 
     Contact support for more information.
@@ -300,7 +314,9 @@ class Customer(TypedDict, total=False):
     bank_branch: Annotated[str, PropertyInfo(alias="bankBranch")]
     """Customer bank branch. Used for some types of withdrawals."""
 
-    citizenship_country_code: Annotated[str, PropertyInfo(alias="citizenshipCountryCode")]
+    citizenship_country_code: Annotated[
+        str, PropertyInfo(alias="citizenshipCountryCode")
+    ]
     """Customer country of citizenship"""
 
     date_of_birth: Annotated[str, PropertyInfo(alias="dateOfBirth")]
@@ -373,7 +389,9 @@ class Customer(TypedDict, total=False):
     locale: str
     """Customer preferred display language"""
 
-    payment_instrument_kyc_status: Annotated[bool, PropertyInfo(alias="paymentInstrumentKycStatus")]
+    payment_instrument_kyc_status: Annotated[
+        bool, PropertyInfo(alias="paymentInstrumentKycStatus")
+    ]
     """
     Indicates whether the payment instrument (usually the card number) has passed
     KYC verification
@@ -409,13 +427,17 @@ class SubscriptionRetryStrategy(TypedDict, total=False):
     number_of_cycles: Required[Annotated[int, PropertyInfo(alias="numberOfCycles")]]
     """Required number of retries"""
 
-    amount_adjustments: Annotated[Iterable[int], PropertyInfo(alias="amountAdjustments")]
+    amount_adjustments: Annotated[
+        Iterable[int], PropertyInfo(alias="amountAdjustments")
+    ]
     """
     If specified, the nth element contains the percentage of the initial amount that
     will be charged for the nth retry
     """
 
-    frequency_unit: Annotated[Literal["MINUTE", "DAY", "WEEK", "MONTH"], PropertyInfo(alias="frequencyUnit")]
+    frequency_unit: Annotated[
+        Literal["MINUTE", "DAY", "WEEK", "MONTH"], PropertyInfo(alias="frequencyUnit")
+    ]
     """The interval at which the subscription is retried.
 
     Use 'MINUTE' for testing purposes only.
@@ -439,7 +461,9 @@ class Subscription(TypedDict, total=False):
     description: str
     """Description for subsequent recurring payments"""
 
-    frequency_unit: Annotated[Literal["MINUTE", "DAY", "WEEK", "MONTH"], PropertyInfo(alias="frequencyUnit")]
+    frequency_unit: Annotated[
+        Literal["MINUTE", "DAY", "WEEK", "MONTH"], PropertyInfo(alias="frequencyUnit")
+    ]
     """The interval at which the subscription is billed.
 
     Use 'MINUTE' for testing purposes only.
@@ -451,7 +475,9 @@ class Subscription(TypedDict, total=False):
     Unlimited if value is not specified.
     """
 
-    retry_strategy: Annotated[SubscriptionRetryStrategy, PropertyInfo(alias="retryStrategy")]
+    retry_strategy: Annotated[
+        SubscriptionRetryStrategy, PropertyInfo(alias="retryStrategy")
+    ]
     """Retry strategy for subscription.
 
     If not specified, the subscription is canceled after the first failed payment
