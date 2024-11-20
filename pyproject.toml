@@ -5,7 +5,7 @@ description = "The official Python library for the paymaxis API"
 dynamic = ["readme"]
 license = "Apache-2.0"
 authors = [
-{ name = "Paymaxis", email = "support@paymaxis.com" },
+{ name = "TralahM", email = "briantralah@gmail.com" },
 ]
 dependencies = [
     "httpx>=0.23.0, <1",

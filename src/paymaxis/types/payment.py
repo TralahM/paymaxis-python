@@ -7,7 +7,13 @@ from pydantic import Field as FieldInfo
 
 from .._models import BaseModel
 
-__all__ = ["Payment", "Result", "ResultBillingAddress", "ResultCustomer", "ResultPaymentMethodDetails"]
+__all__ = [
+    "Payment",
+    "Result",
+    "ResultBillingAddress",
+    "ResultCustomer",
+    "ResultPaymentMethodDetails",
+]
 
 
 class ResultBillingAddress(BaseModel):
@@ -49,12 +55,16 @@ class ResultCustomer(BaseModel):
     bank_branch: Optional[str] = FieldInfo(alias="bankBranch", default=None)
     """Customer bank branch. Used for some types of withdrawals."""
 
-    citizenship_country_code: Optional[str] = FieldInfo(alias="citizenshipCountryCode", default=None)
+    citizenship_country_code: Optional[str] = FieldInfo(
+        alias="citizenshipCountryCode", default=None
+    )
     """Customer country of citizenship"""
 
     date_of_birth: Optional[str] = FieldInfo(alias="dateOfBirth", default=None)
 
-    date_of_first_deposit: Optional[str] = FieldInfo(alias="dateOfFirstDeposit", default=None)
+    date_of_first_deposit: Optional[str] = FieldInfo(
+        alias="dateOfFirstDeposit", default=None
+    )
     """Date of the first deposit from the customer"""
 
     deposits_amount: Optional[int] = FieldInfo(alias="depositsAmount", default=None)
@@ -121,7 +131,9 @@ class ResultCustomer(BaseModel):
     locale: Optional[str] = None
     """Customer preferred display language"""
 
-    payment_instrument_kyc_status: Optional[bool] = FieldInfo(alias="paymentInstrumentKycStatus", default=None)
+    payment_instrument_kyc_status: Optional[bool] = FieldInfo(
+        alias="paymentInstrumentKycStatus", default=None
+    )
     """
     Indicates whether the payment instrument (usually the card number) has passed
     KYC verification
@@ -140,7 +152,9 @@ class ResultCustomer(BaseModel):
     routing_group: Optional[str] = FieldInfo(alias="routingGroup", default=None)
     """Identify the customer as belonging to a specific group that is used for routing"""
 
-    withdrawals_amount: Optional[int] = FieldInfo(alias="withdrawalsAmount", default=None)
+    withdrawals_amount: Optional[int] = FieldInfo(
+        alias="withdrawalsAmount", default=None
+    )
     """How much the customer has withdrawn, in base currency"""
 
     withdrawals_cnt: Optional[int] = FieldInfo(alias="withdrawalsCnt", default=None)
@@ -157,10 +171,14 @@ class ResultPaymentMethodDetails(BaseModel):
     cardholder_name: Optional[str] = FieldInfo(alias="cardholderName", default=None)
     """Cardholder name (for BASIC_CARD payment method only)"""
 
-    card_issuing_country_code: Optional[str] = FieldInfo(alias="cardIssuingCountryCode", default=None)
+    card_issuing_country_code: Optional[str] = FieldInfo(
+        alias="cardIssuingCountryCode", default=None
+    )
     """Card issuing country code (for BASIC_CARD payment method only)"""
 
-    customer_account_number: Optional[str] = FieldInfo(alias="customerAccountNumber", default=None)
+    customer_account_number: Optional[str] = FieldInfo(
+        alias="customerAccountNumber", default=None
+    )
     """Customer account Id in external system or masked card PAN"""
 
 
@@ -171,7 +189,9 @@ class Result(BaseModel):
     amount: Optional[float] = None
     """Amount sent to the payment provider"""
 
-    billing_address: Optional[ResultBillingAddress] = FieldInfo(alias="billingAddress", default=None)
+    billing_address: Optional[ResultBillingAddress] = FieldInfo(
+        alias="billingAddress", default=None
+    )
     """Customer's billing address"""
 
     currency: Optional[str] = None
@@ -198,13 +218,19 @@ class Result(BaseModel):
     error_code: Optional[str] = FieldInfo(alias="errorCode", default=None)
     """Check 'Error Codes' section for details"""
 
-    external_fee_amount: Optional[float] = FieldInfo(alias="externalFeeAmount", default=None)
+    external_fee_amount: Optional[float] = FieldInfo(
+        alias="externalFeeAmount", default=None
+    )
     """Provider fee. Filled only if supported by the provider."""
 
-    external_fee_currency: Optional[str] = FieldInfo(alias="externalFeeCurrency", default=None)
+    external_fee_currency: Optional[str] = FieldInfo(
+        alias="externalFeeCurrency", default=None
+    )
     """Provider fee currency. Filled only if supported by the provider."""
 
-    external_result_code: Optional[str] = FieldInfo(alias="externalResultCode", default=None)
+    external_result_code: Optional[str] = FieldInfo(
+        alias="externalResultCode", default=None
+    )
     """Result code from external provider"""
 
     parent_payment_id: Optional[str] = FieldInfo(alias="parentPaymentId", default=None)
@@ -372,9 +398,13 @@ class Result(BaseModel):
     ] = FieldInfo(alias="paymentMethod", default=None)
     """Payment Method"""
 
-    payment_method_details: Optional[ResultPaymentMethodDetails] = FieldInfo(alias="paymentMethodDetails", default=None)
+    payment_method_details: Optional[ResultPaymentMethodDetails] = FieldInfo(
+        alias="paymentMethodDetails", default=None
+    )
 
-    payment_type: Optional[Literal["DEPOSIT", "WITHDRAWAL", "REFUND"]] = FieldInfo(alias="paymentType", default=None)
+    payment_type: Optional[Literal["DEPOSIT", "WITHDRAWAL", "REFUND"]] = FieldInfo(
+        alias="paymentType", default=None
+    )
     """Payment Type"""
 
     recurring_token: Optional[str] = FieldInfo(alias="recurringToken", default=None)
@@ -389,7 +419,9 @@ class Result(BaseModel):
     start_recurring: Optional[bool] = FieldInfo(alias="startRecurring", default=None)
     """Indicates whether this payment has started a recurring chain"""
 
-    state: Optional[Literal["CHECKOUT", "PENDING", "CANCELLED", "DECLINED", "COMPLETED"]] = None
+    state: Optional[
+        Literal["CHECKOUT", "PENDING", "CANCELLED", "DECLINED", "COMPLETED"]
+    ] = None
     """Payment State"""
 
     terminal_name: Optional[str] = FieldInfo(alias="terminalName", default=None)

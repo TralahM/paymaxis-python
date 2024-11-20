@@ -21,7 +21,11 @@ from paymaxis import Paymaxis, AsyncPaymaxis, APIResponseValidationError
 from paymaxis._types import Omit
 from paymaxis._models import BaseModel, FinalRequestOptions
 from paymaxis._constants import RAW_RESPONSE_HEADER
-from paymaxis._exceptions import APIStatusError, APITimeoutError, APIResponseValidationError
+from paymaxis._exceptions import (
+    APIStatusError,
+    APITimeoutError,
+    APIResponseValidationError,
+)
 from paymaxis._base_client import (
     DEFAULT_TIMEOUT,
     HTTPX_DEFAULT_TIMEOUT,
@@ -47,18 +51,24 @@ def _low_retry_timeout(*_args: Any, **_kwargs: Any) -> float:
 
 def _get_open_connections(client: Paymaxis | AsyncPaymaxis) -> int:
     transport = client._client._transport
-    assert isinstance(transport, httpx.HTTPTransport) or isinstance(transport, httpx.AsyncHTTPTransport)
+    assert isinstance(transport, httpx.HTTPTransport) or isinstance(
+        transport, httpx.AsyncHTTPTransport
+    )
 
     pool = transport._pool
     return len(pool._requests)
 
 
 class TestPaymaxis:
-    client = Paymaxis(base_url=base_url, bearer_token=bearer_token, _strict_response_validation=True)
+    client = Paymaxis(
+        base_url=base_url, bearer_token=bearer_token, _strict_response_validation=True
+    )
 
     @pytest.mark.respx(base_url=base_url)
     def test_raw_response(self, respx_mock: MockRouter) -> None:
-        respx_mock.post("/foo").mock(return_value=httpx.Response(200, json={"foo": "bar"}))
+        respx_mock.post("/foo").mock(
+            return_value=httpx.Response(200, json={"foo": "bar"})
+        )
 
         response = self.client.post("/foo", cast_to=httpx.Response)
         assert response.status_code == 200
@@ -68,7 +78,11 @@ class TestPaymaxis:
     @pytest.mark.respx(base_url=base_url)
     def test_raw_response_for_binary(self, respx_mock: MockRouter) -> None:
         respx_mock.post("/foo").mock(
-            return_value=httpx.Response(200, headers={"Content-Type": "application/binary"}, content='{"foo": "bar"}')
+            return_value=httpx.Response(
+                200,
+                headers={"Content-Type": "application/binary"},
+                content='{"foo": "bar"}',
+            )
         )
 
         response = self.client.post("/foo", cast_to=httpx.Response)
@@ -139,7 +153,10 @@ class TestPaymaxis:
 
     def test_copy_default_query(self) -> None:
         client = Paymaxis(
-            base_url=base_url, bearer_token=bearer_token, _strict_response_validation=True, default_query={"foo": "bar"}
+            base_url=base_url,
+            bearer_token=bearer_token,
+            _strict_response_validation=True,
+            default_query={"foo": "bar"},
         )
         assert _get_params(client)["foo"] == "bar"
 
@@ -187,7 +204,9 @@ class TestPaymaxis:
                 continue
 
             copy_param = copy_signature.parameters.get(name)
-            assert copy_param is not None, f"copy() signature is missing the {name} param"
+            assert (
+                copy_param is not None
+            ), f"copy() signature is missing the {name} param"
 
     def test_copy_build_request(self) -> None:
         options = FinalRequestOptions(method="get", url="/foo")
@@ -213,7 +232,9 @@ class TestPaymaxis:
 
         tracemalloc.stop()
 
-        def add_leak(leaks: list[tracemalloc.StatisticDiff], diff: tracemalloc.StatisticDiff) -> None:
+        def add_leak(
+            leaks: list[tracemalloc.StatisticDiff], diff: tracemalloc.StatisticDiff
+        ) -> None:
             if diff.count == 0:
                 # Avoid false positives by considering only leaks (i.e. allocations that persist).
                 return
@@ -252,7 +273,9 @@ class TestPaymaxis:
             raise AssertionError()
 
     def test_request_timeout(self) -> None:
-        request = self.client._build_request(FinalRequestOptions(method="get", url="/foo"))
+        request = self.client._build_request(
+            FinalRequestOptions(method="get", url="/foo")
+        )
         timeout = httpx.Timeout(**request.extensions["timeout"])  # type: ignore
         assert timeout == DEFAULT_TIMEOUT
 
@@ -264,7 +287,10 @@ class TestPaymaxis:
 
     def test_client_timeout_option(self) -> None:
         client = Paymaxis(
-            base_url=base_url, bearer_token=bearer_token, _strict_response_validation=True, timeout=httpx.Timeout(0)
+            base_url=base_url,
+            bearer_token=bearer_token,
+            _strict_response_validation=True,
+            timeout=httpx.Timeout(0),
         )
 
         request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
@@ -275,30 +301,45 @@ class TestPaymaxis:
         # custom timeout given to the httpx client should be used
         with httpx.Client(timeout=None) as http_client:
             client = Paymaxis(
-                base_url=base_url, bearer_token=bearer_token, _strict_response_validation=True, http_client=http_client
+                base_url=base_url,
+                bearer_token=bearer_token,
+                _strict_response_validation=True,
+                http_client=http_client,
             )
 
-            request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
+            request = client._build_request(
+                FinalRequestOptions(method="get", url="/foo")
+            )
             timeout = httpx.Timeout(**request.extensions["timeout"])  # type: ignore
             assert timeout == httpx.Timeout(None)
 
         # no timeout given to the httpx client should not use the httpx default
         with httpx.Client() as http_client:
             client = Paymaxis(
-                base_url=base_url, bearer_token=bearer_token, _strict_response_validation=True, http_client=http_client
+                base_url=base_url,
+                bearer_token=bearer_token,
+                _strict_response_validation=True,
+                http_client=http_client,
             )
 
-            request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
+            request = client._build_request(
+                FinalRequestOptions(method="get", url="/foo")
+            )
             timeout = httpx.Timeout(**request.extensions["timeout"])  # type: ignore
             assert timeout == DEFAULT_TIMEOUT
 
         # explicitly passing the default timeout currently results in it being ignored
         with httpx.Client(timeout=HTTPX_DEFAULT_TIMEOUT) as http_client:
             client = Paymaxis(
-                base_url=base_url, bearer_token=bearer_token, _strict_response_validation=True, http_client=http_client
+                base_url=base_url,
+                bearer_token=bearer_token,
+                _strict_response_validation=True,
+                http_client=http_client,
             )
 
-            request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
+            request = client._build_request(
+                FinalRequestOptions(method="get", url="/foo")
+            )
             timeout = httpx.Timeout(**request.extensions["timeout"])  # type: ignore
             assert timeout == DEFAULT_TIMEOUT  # our default
 
@@ -402,7 +443,9 @@ class TestPaymaxis:
         assert request.headers.get("X-Foo") == "Foo"
 
         # `extra_headers` takes priority over `default_headers` when keys clash
-        request = self.client.with_options(default_headers={"X-Bar": "true"})._build_request(
+        request = self.client.with_options(
+            default_headers={"X-Bar": "true"}
+        )._build_request(
             FinalRequestOptions(
                 method="post",
                 url="/foo",
@@ -459,7 +502,9 @@ class TestPaymaxis:
             FinalRequestOptions.construct(
                 method="get",
                 url="/foo",
-                headers={"Content-Type": "multipart/form-data; boundary=6b7ba517decee4a450543ea6ae821c82"},
+                headers={
+                    "Content-Type": "multipart/form-data; boundary=6b7ba517decee4a450543ea6ae821c82"
+                },
                 json_data={"array": ["foo", "bar"]},
                 files=[("foo.txt", b"hello world")],
             )
@@ -491,7 +536,9 @@ class TestPaymaxis:
         class Model2(BaseModel):
             foo: str
 
-        respx_mock.get("/foo").mock(return_value=httpx.Response(200, json={"foo": "bar"}))
+        respx_mock.get("/foo").mock(
+            return_value=httpx.Response(200, json={"foo": "bar"})
+        )
 
         response = self.client.get("/foo", cast_to=cast(Any, Union[Model1, Model2]))
         assert isinstance(response, Model2)
@@ -507,7 +554,9 @@ class TestPaymaxis:
         class Model2(BaseModel):
             foo: str
 
-        respx_mock.get("/foo").mock(return_value=httpx.Response(200, json={"foo": "bar"}))
+        respx_mock.get("/foo").mock(
+            return_value=httpx.Response(200, json={"foo": "bar"})
+        )
 
         response = self.client.get("/foo", cast_to=cast(Any, Union[Model1, Model2]))
         assert isinstance(response, Model2)
@@ -520,7 +569,9 @@ class TestPaymaxis:
         assert response.foo == 1
 
     @pytest.mark.respx(base_url=base_url)
-    def test_non_application_json_content_type_for_json_data(self, respx_mock: MockRouter) -> None:
+    def test_non_application_json_content_type_for_json_data(
+        self, respx_mock: MockRouter
+    ) -> None:
         """
         Response that sets Content-Type to something other than application/json but returns json data
         """
@@ -542,7 +593,9 @@ class TestPaymaxis:
 
     def test_base_url_setter(self) -> None:
         client = Paymaxis(
-            base_url="https://example.com/from_init", bearer_token=bearer_token, _strict_response_validation=True
+            base_url="https://example.com/from_init",
+            bearer_token=bearer_token,
+            _strict_response_validation=True,
         )
         assert client.base_url == "https://example.com/from_init/"
 
@@ -552,16 +605,25 @@ class TestPaymaxis:
 
     def test_base_url_env(self) -> None:
         with update_env(PAYMAXIS_BASE_URL="http://localhost:5000/from/env"):
-            client = Paymaxis(bearer_token=bearer_token, _strict_response_validation=True)
+            client = Paymaxis(
+                bearer_token=bearer_token, _strict_response_validation=True
+            )
             assert client.base_url == "http://localhost:5000/from/env/"
 
         # explicit environment arg requires explicitness
         with update_env(PAYMAXIS_BASE_URL="http://localhost:5000/from/env"):
             with pytest.raises(ValueError, match=r"you must pass base_url=None"):
-                Paymaxis(bearer_token=bearer_token, _strict_response_validation=True, environment="sandbox")
+                Paymaxis(
+                    bearer_token=bearer_token,
+                    _strict_response_validation=True,
+                    environment="sandbox",
+                )
 
             client = Paymaxis(
-                base_url=None, bearer_token=bearer_token, _strict_response_validation=True, environment="sandbox"
+                base_url=None,
+                bearer_token=bearer_token,
+                _strict_response_validation=True,
+                environment="sandbox",
             )
             assert str(client.base_url).startswith("https://app-sandbox.paymaxis.com")
 
@@ -647,7 +709,11 @@ class TestPaymaxis:
         assert request.url == "https://myapi.com/foo"
 
     def test_copied_client_does_not_close_http(self) -> None:
-        client = Paymaxis(base_url=base_url, bearer_token=bearer_token, _strict_response_validation=True)
+        client = Paymaxis(
+            base_url=base_url,
+            bearer_token=bearer_token,
+            _strict_response_validation=True,
+        )
         assert not client.is_closed()
 
         copied = client.copy()
@@ -658,7 +724,11 @@ class TestPaymaxis:
         assert not client.is_closed()
 
     def test_client_context_manager(self) -> None:
-        client = Paymaxis(base_url=base_url, bearer_token=bearer_token, _strict_response_validation=True)
+        client = Paymaxis(
+            base_url=base_url,
+            bearer_token=bearer_token,
+            _strict_response_validation=True,
+        )
         with client as c2:
             assert c2 is client
             assert not c2.is_closed()
@@ -670,7 +740,9 @@ class TestPaymaxis:
         class Model(BaseModel):
             foo: str
 
-        respx_mock.get("/foo").mock(return_value=httpx.Response(200, json={"foo": {"invalid": True}}))
+        respx_mock.get("/foo").mock(
+            return_value=httpx.Response(200, json={"foo": {"invalid": True}})
+        )
 
         with pytest.raises(APIResponseValidationError) as exc:
             self.client.get("/foo", cast_to=Model)
@@ -691,14 +763,24 @@ class TestPaymaxis:
         class Model(BaseModel):
             name: str
 
-        respx_mock.get("/foo").mock(return_value=httpx.Response(200, text="my-custom-format"))
+        respx_mock.get("/foo").mock(
+            return_value=httpx.Response(200, text="my-custom-format")
+        )
 
-        strict_client = Paymaxis(base_url=base_url, bearer_token=bearer_token, _strict_response_validation=True)
+        strict_client = Paymaxis(
+            base_url=base_url,
+            bearer_token=bearer_token,
+            _strict_response_validation=True,
+        )
 
         with pytest.raises(APIResponseValidationError):
             strict_client.get("/foo", cast_to=Model)
 
-        client = Paymaxis(base_url=base_url, bearer_token=bearer_token, _strict_response_validation=False)
+        client = Paymaxis(
+            base_url=base_url,
+            bearer_token=bearer_token,
+            _strict_response_validation=False,
+        )
 
         response = client.get("/foo", cast_to=Model)
         assert isinstance(response, str)  # type: ignore[unreachable]
@@ -725,18 +807,32 @@ class TestPaymaxis:
         ],
     )
     @mock.patch("time.time", mock.MagicMock(return_value=1696004797))
-    def test_parse_retry_after_header(self, remaining_retries: int, retry_after: str, timeout: float) -> None:
-        client = Paymaxis(base_url=base_url, bearer_token=bearer_token, _strict_response_validation=True)
+    def test_parse_retry_after_header(
+        self, remaining_retries: int, retry_after: str, timeout: float
+    ) -> None:
+        client = Paymaxis(
+            base_url=base_url,
+            bearer_token=bearer_token,
+            _strict_response_validation=True,
+        )
 
         headers = httpx.Headers({"retry-after": retry_after})
         options = FinalRequestOptions(method="get", url="/foo", max_retries=3)
-        calculated = client._calculate_retry_timeout(remaining_retries, options, headers)
-        assert calculated == pytest.approx(timeout, 0.5 * 0.875)  # pyright: ignore[reportUnknownMemberType]
+        calculated = client._calculate_retry_timeout(
+            remaining_retries, options, headers
+        )
+        assert calculated == pytest.approx(
+            timeout, 0.5 * 0.875
+        )  # pyright: ignore[reportUnknownMemberType]
 
-    @mock.patch("paymaxis._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
+    @mock.patch(
+        "paymaxis._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout
+    )
     @pytest.mark.respx(base_url=base_url)
     def test_retrying_timeout_errors_doesnt_leak(self, respx_mock: MockRouter) -> None:
-        respx_mock.post("/api/v1/payments").mock(side_effect=httpx.TimeoutException("Test timeout error"))
+        respx_mock.post("/api/v1/payments").mock(
+            side_effect=httpx.TimeoutException("Test timeout error")
+        )
 
         with pytest.raises(APITimeoutError):
             self.client.post(
@@ -757,7 +853,9 @@ class TestPaymaxis:
 
         assert _get_open_connections(self.client) == 0
 
-    @mock.patch("paymaxis._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
+    @mock.patch(
+        "paymaxis._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout
+    )
     @pytest.mark.respx(base_url=base_url)
     def test_retrying_status_errors_doesnt_leak(self, respx_mock: MockRouter) -> None:
         respx_mock.post("/api/v1/payments").mock(return_value=httpx.Response(500))
@@ -782,7 +880,9 @@ class TestPaymaxis:
         assert _get_open_connections(self.client) == 0
 
     @pytest.mark.parametrize("failures_before_success", [0, 2, 4])
-    @mock.patch("paymaxis._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
+    @mock.patch(
+        "paymaxis._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout
+    )
     @pytest.mark.respx(base_url=base_url)
     @pytest.mark.parametrize("failure_mode", ["status", "exception"])
     def test_retries_taken(
@@ -807,13 +907,20 @@ class TestPaymaxis:
 
         respx_mock.post("/api/v1/payments").mock(side_effect=retry_handler)
 
-        response = client.payments.with_raw_response.create(currency="EUR", payment_type="DEPOSIT")
+        response = client.payments.with_raw_response.create(
+            currency="EUR", payment_type="DEPOSIT"
+        )
 
         assert response.retries_taken == failures_before_success
-        assert int(response.http_request.headers.get("x-stainless-retry-count")) == failures_before_success
+        assert (
+            int(response.http_request.headers.get("x-stainless-retry-count"))
+            == failures_before_success
+        )
 
     @pytest.mark.parametrize("failures_before_success", [0, 2, 4])
-    @mock.patch("paymaxis._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
+    @mock.patch(
+        "paymaxis._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout
+    )
     @pytest.mark.respx(base_url=base_url)
     def test_omit_retry_count_header(
         self, client: Paymaxis, failures_before_success: int, respx_mock: MockRouter
@@ -832,13 +939,19 @@ class TestPaymaxis:
         respx_mock.post("/api/v1/payments").mock(side_effect=retry_handler)
 
         response = client.payments.with_raw_response.create(
-            currency="EUR", payment_type="DEPOSIT", extra_headers={"x-stainless-retry-count": Omit()}
+            currency="EUR",
+            payment_type="DEPOSIT",
+            extra_headers={"x-stainless-retry-count": Omit()},
         )
 
-        assert len(response.http_request.headers.get_list("x-stainless-retry-count")) == 0
+        assert (
+            len(response.http_request.headers.get_list("x-stainless-retry-count")) == 0
+        )
 
     @pytest.mark.parametrize("failures_before_success", [0, 2, 4])
-    @mock.patch("paymaxis._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
+    @mock.patch(
+        "paymaxis._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout
+    )
     @pytest.mark.respx(base_url=base_url)
     def test_overwrite_retry_count_header(
         self, client: Paymaxis, failures_before_success: int, respx_mock: MockRouter
@@ -857,19 +970,25 @@ class TestPaymaxis:
         respx_mock.post("/api/v1/payments").mock(side_effect=retry_handler)
 
         response = client.payments.with_raw_response.create(
-            currency="EUR", payment_type="DEPOSIT", extra_headers={"x-stainless-retry-count": "42"}
+            currency="EUR",
+            payment_type="DEPOSIT",
+            extra_headers={"x-stainless-retry-count": "42"},
         )
 
         assert response.http_request.headers.get("x-stainless-retry-count") == "42"
 
 
 class TestAsyncPaymaxis:
-    client = AsyncPaymaxis(base_url=base_url, bearer_token=bearer_token, _strict_response_validation=True)
+    client = AsyncPaymaxis(
+        base_url=base_url, bearer_token=bearer_token, _strict_response_validation=True
+    )
 
     @pytest.mark.respx(base_url=base_url)
     @pytest.mark.asyncio
     async def test_raw_response(self, respx_mock: MockRouter) -> None:
-        respx_mock.post("/foo").mock(return_value=httpx.Response(200, json={"foo": "bar"}))
+        respx_mock.post("/foo").mock(
+            return_value=httpx.Response(200, json={"foo": "bar"})
+        )
 
         response = await self.client.post("/foo", cast_to=httpx.Response)
         assert response.status_code == 200
@@ -880,7 +999,11 @@ class TestAsyncPaymaxis:
     @pytest.mark.asyncio
     async def test_raw_response_for_binary(self, respx_mock: MockRouter) -> None:
         respx_mock.post("/foo").mock(
-            return_value=httpx.Response(200, headers={"Content-Type": "application/binary"}, content='{"foo": "bar"}')
+            return_value=httpx.Response(
+                200,
+                headers={"Content-Type": "application/binary"},
+                content='{"foo": "bar"}',
+            )
         )
 
         response = await self.client.post("/foo", cast_to=httpx.Response)
@@ -951,7 +1074,10 @@ class TestAsyncPaymaxis:
 
     def test_copy_default_query(self) -> None:
         client = AsyncPaymaxis(
-            base_url=base_url, bearer_token=bearer_token, _strict_response_validation=True, default_query={"foo": "bar"}
+            base_url=base_url,
+            bearer_token=bearer_token,
+            _strict_response_validation=True,
+            default_query={"foo": "bar"},
         )
         assert _get_params(client)["foo"] == "bar"
 
@@ -999,7 +1125,9 @@ class TestAsyncPaymaxis:
                 continue
 
             copy_param = copy_signature.parameters.get(name)
-            assert copy_param is not None, f"copy() signature is missing the {name} param"
+            assert (
+                copy_param is not None
+            ), f"copy() signature is missing the {name} param"
 
     def test_copy_build_request(self) -> None:
         options = FinalRequestOptions(method="get", url="/foo")
@@ -1025,7 +1153,9 @@ class TestAsyncPaymaxis:
 
         tracemalloc.stop()
 
-        def add_leak(leaks: list[tracemalloc.StatisticDiff], diff: tracemalloc.StatisticDiff) -> None:
+        def add_leak(
+            leaks: list[tracemalloc.StatisticDiff], diff: tracemalloc.StatisticDiff
+        ) -> None:
             if diff.count == 0:
                 # Avoid false positives by considering only leaks (i.e. allocations that persist).
                 return
@@ -1064,7 +1194,9 @@ class TestAsyncPaymaxis:
             raise AssertionError()
 
     async def test_request_timeout(self) -> None:
-        request = self.client._build_request(FinalRequestOptions(method="get", url="/foo"))
+        request = self.client._build_request(
+            FinalRequestOptions(method="get", url="/foo")
+        )
         timeout = httpx.Timeout(**request.extensions["timeout"])  # type: ignore
         assert timeout == DEFAULT_TIMEOUT
 
@@ -1076,7 +1208,10 @@ class TestAsyncPaymaxis:
 
     async def test_client_timeout_option(self) -> None:
         client = AsyncPaymaxis(
-            base_url=base_url, bearer_token=bearer_token, _strict_response_validation=True, timeout=httpx.Timeout(0)
+            base_url=base_url,
+            bearer_token=bearer_token,
+            _strict_response_validation=True,
+            timeout=httpx.Timeout(0),
         )
 
         request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
@@ -1087,30 +1222,45 @@ class TestAsyncPaymaxis:
         # custom timeout given to the httpx client should be used
         async with httpx.AsyncClient(timeout=None) as http_client:
             client = AsyncPaymaxis(
-                base_url=base_url, bearer_token=bearer_token, _strict_response_validation=True, http_client=http_client
+                base_url=base_url,
+                bearer_token=bearer_token,
+                _strict_response_validation=True,
+                http_client=http_client,
             )
 
-            request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
+            request = client._build_request(
+                FinalRequestOptions(method="get", url="/foo")
+            )
             timeout = httpx.Timeout(**request.extensions["timeout"])  # type: ignore
             assert timeout == httpx.Timeout(None)
 
         # no timeout given to the httpx client should not use the httpx default
         async with httpx.AsyncClient() as http_client:
             client = AsyncPaymaxis(
-                base_url=base_url, bearer_token=bearer_token, _strict_response_validation=True, http_client=http_client
+                base_url=base_url,
+                bearer_token=bearer_token,
+                _strict_response_validation=True,
+                http_client=http_client,
             )
 
-            request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
+            request = client._build_request(
+                FinalRequestOptions(method="get", url="/foo")
+            )
             timeout = httpx.Timeout(**request.extensions["timeout"])  # type: ignore
             assert timeout == DEFAULT_TIMEOUT
 
         # explicitly passing the default timeout currently results in it being ignored
         async with httpx.AsyncClient(timeout=HTTPX_DEFAULT_TIMEOUT) as http_client:
             client = AsyncPaymaxis(
-                base_url=base_url, bearer_token=bearer_token, _strict_response_validation=True, http_client=http_client
+                base_url=base_url,
+                bearer_token=bearer_token,
+                _strict_response_validation=True,
+                http_client=http_client,
             )
 
-            request = client._build_request(FinalRequestOptions(method="get", url="/foo"))
+            request = client._build_request(
+                FinalRequestOptions(method="get", url="/foo")
+            )
             timeout = httpx.Timeout(**request.extensions["timeout"])  # type: ignore
             assert timeout == DEFAULT_TIMEOUT  # our default
 
@@ -1214,7 +1364,9 @@ class TestAsyncPaymaxis:
         assert request.headers.get("X-Foo") == "Foo"
 
         # `extra_headers` takes priority over `default_headers` when keys clash
-        request = self.client.with_options(default_headers={"X-Bar": "true"})._build_request(
+        request = self.client.with_options(
+            default_headers={"X-Bar": "true"}
+        )._build_request(
             FinalRequestOptions(
                 method="post",
                 url="/foo",
@@ -1271,7 +1423,9 @@ class TestAsyncPaymaxis:
             FinalRequestOptions.construct(
                 method="get",
                 url="/foo",
-                headers={"Content-Type": "multipart/form-data; boundary=6b7ba517decee4a450543ea6ae821c82"},
+                headers={
+                    "Content-Type": "multipart/form-data; boundary=6b7ba517decee4a450543ea6ae821c82"
+                },
                 json_data={"array": ["foo", "bar"]},
                 files=[("foo.txt", b"hello world")],
             )
@@ -1303,9 +1457,13 @@ class TestAsyncPaymaxis:
         class Model2(BaseModel):
             foo: str
 
-        respx_mock.get("/foo").mock(return_value=httpx.Response(200, json={"foo": "bar"}))
+        respx_mock.get("/foo").mock(
+            return_value=httpx.Response(200, json={"foo": "bar"})
+        )
 
-        response = await self.client.get("/foo", cast_to=cast(Any, Union[Model1, Model2]))
+        response = await self.client.get(
+            "/foo", cast_to=cast(Any, Union[Model1, Model2])
+        )
         assert isinstance(response, Model2)
         assert response.foo == "bar"
 
@@ -1319,20 +1477,28 @@ class TestAsyncPaymaxis:
         class Model2(BaseModel):
             foo: str
 
-        respx_mock.get("/foo").mock(return_value=httpx.Response(200, json={"foo": "bar"}))
+        respx_mock.get("/foo").mock(
+            return_value=httpx.Response(200, json={"foo": "bar"})
+        )
 
-        response = await self.client.get("/foo", cast_to=cast(Any, Union[Model1, Model2]))
+        response = await self.client.get(
+            "/foo", cast_to=cast(Any, Union[Model1, Model2])
+        )
         assert isinstance(response, Model2)
         assert response.foo == "bar"
 
         respx_mock.get("/foo").mock(return_value=httpx.Response(200, json={"foo": 1}))
 
-        response = await self.client.get("/foo", cast_to=cast(Any, Union[Model1, Model2]))
+        response = await self.client.get(
+            "/foo", cast_to=cast(Any, Union[Model1, Model2])
+        )
         assert isinstance(response, Model1)
         assert response.foo == 1
 
     @pytest.mark.respx(base_url=base_url)
-    async def test_non_application_json_content_type_for_json_data(self, respx_mock: MockRouter) -> None:
+    async def test_non_application_json_content_type_for_json_data(
+        self, respx_mock: MockRouter
+    ) -> None:
         """
         Response that sets Content-Type to something other than application/json but returns json data
         """
@@ -1354,7 +1520,9 @@ class TestAsyncPaymaxis:
 
     def test_base_url_setter(self) -> None:
         client = AsyncPaymaxis(
-            base_url="https://example.com/from_init", bearer_token=bearer_token, _strict_response_validation=True
+            base_url="https://example.com/from_init",
+            bearer_token=bearer_token,
+            _strict_response_validation=True,
         )
         assert client.base_url == "https://example.com/from_init/"
 
@@ -1364,16 +1532,25 @@ class TestAsyncPaymaxis:
 
     def test_base_url_env(self) -> None:
         with update_env(PAYMAXIS_BASE_URL="http://localhost:5000/from/env"):
-            client = AsyncPaymaxis(bearer_token=bearer_token, _strict_response_validation=True)
+            client = AsyncPaymaxis(
+                bearer_token=bearer_token, _strict_response_validation=True
+            )
             assert client.base_url == "http://localhost:5000/from/env/"
 
         # explicit environment arg requires explicitness
         with update_env(PAYMAXIS_BASE_URL="http://localhost:5000/from/env"):
             with pytest.raises(ValueError, match=r"you must pass base_url=None"):
-                AsyncPaymaxis(bearer_token=bearer_token, _strict_response_validation=True, environment="sandbox")
+                AsyncPaymaxis(
+                    bearer_token=bearer_token,
+                    _strict_response_validation=True,
+                    environment="sandbox",
+                )
 
             client = AsyncPaymaxis(
-                base_url=None, bearer_token=bearer_token, _strict_response_validation=True, environment="sandbox"
+                base_url=None,
+                bearer_token=bearer_token,
+                _strict_response_validation=True,
+                environment="sandbox",
             )
             assert str(client.base_url).startswith("https://app-sandbox.paymaxis.com")
 
@@ -1459,7 +1636,11 @@ class TestAsyncPaymaxis:
         assert request.url == "https://myapi.com/foo"
 
     async def test_copied_client_does_not_close_http(self) -> None:
-        client = AsyncPaymaxis(base_url=base_url, bearer_token=bearer_token, _strict_response_validation=True)
+        client = AsyncPaymaxis(
+            base_url=base_url,
+            bearer_token=bearer_token,
+            _strict_response_validation=True,
+        )
         assert not client.is_closed()
 
         copied = client.copy()
@@ -1471,7 +1652,11 @@ class TestAsyncPaymaxis:
         assert not client.is_closed()
 
     async def test_client_context_manager(self) -> None:
-        client = AsyncPaymaxis(base_url=base_url, bearer_token=bearer_token, _strict_response_validation=True)
+        client = AsyncPaymaxis(
+            base_url=base_url,
+            bearer_token=bearer_token,
+            _strict_response_validation=True,
+        )
         async with client as c2:
             assert c2 is client
             assert not c2.is_closed()
@@ -1480,11 +1665,15 @@ class TestAsyncPaymaxis:
 
     @pytest.mark.respx(base_url=base_url)
     @pytest.mark.asyncio
-    async def test_client_response_validation_error(self, respx_mock: MockRouter) -> None:
+    async def test_client_response_validation_error(
+        self, respx_mock: MockRouter
+    ) -> None:
         class Model(BaseModel):
             foo: str
 
-        respx_mock.get("/foo").mock(return_value=httpx.Response(200, json={"foo": {"invalid": True}}))
+        respx_mock.get("/foo").mock(
+            return_value=httpx.Response(200, json={"foo": {"invalid": True}})
+        )
 
         with pytest.raises(APIResponseValidationError) as exc:
             await self.client.get("/foo", cast_to=Model)
@@ -1502,18 +1691,30 @@ class TestAsyncPaymaxis:
 
     @pytest.mark.respx(base_url=base_url)
     @pytest.mark.asyncio
-    async def test_received_text_for_expected_json(self, respx_mock: MockRouter) -> None:
+    async def test_received_text_for_expected_json(
+        self, respx_mock: MockRouter
+    ) -> None:
         class Model(BaseModel):
             name: str
 
-        respx_mock.get("/foo").mock(return_value=httpx.Response(200, text="my-custom-format"))
+        respx_mock.get("/foo").mock(
+            return_value=httpx.Response(200, text="my-custom-format")
+        )
 
-        strict_client = AsyncPaymaxis(base_url=base_url, bearer_token=bearer_token, _strict_response_validation=True)
+        strict_client = AsyncPaymaxis(
+            base_url=base_url,
+            bearer_token=bearer_token,
+            _strict_response_validation=True,
+        )
 
         with pytest.raises(APIResponseValidationError):
             await strict_client.get("/foo", cast_to=Model)
 
-        client = AsyncPaymaxis(base_url=base_url, bearer_token=bearer_token, _strict_response_validation=False)
+        client = AsyncPaymaxis(
+            base_url=base_url,
+            bearer_token=bearer_token,
+            _strict_response_validation=False,
+        )
 
         response = await client.get("/foo", cast_to=Model)
         assert isinstance(response, str)  # type: ignore[unreachable]
@@ -1541,18 +1742,34 @@ class TestAsyncPaymaxis:
     )
     @mock.patch("time.time", mock.MagicMock(return_value=1696004797))
     @pytest.mark.asyncio
-    async def test_parse_retry_after_header(self, remaining_retries: int, retry_after: str, timeout: float) -> None:
-        client = AsyncPaymaxis(base_url=base_url, bearer_token=bearer_token, _strict_response_validation=True)
+    async def test_parse_retry_after_header(
+        self, remaining_retries: int, retry_after: str, timeout: float
+    ) -> None:
+        client = AsyncPaymaxis(
+            base_url=base_url,
+            bearer_token=bearer_token,
+            _strict_response_validation=True,
+        )
 
         headers = httpx.Headers({"retry-after": retry_after})
         options = FinalRequestOptions(method="get", url="/foo", max_retries=3)
-        calculated = client._calculate_retry_timeout(remaining_retries, options, headers)
-        assert calculated == pytest.approx(timeout, 0.5 * 0.875)  # pyright: ignore[reportUnknownMemberType]
+        calculated = client._calculate_retry_timeout(
+            remaining_retries, options, headers
+        )
+        assert calculated == pytest.approx(
+            timeout, 0.5 * 0.875
+        )  # pyright: ignore[reportUnknownMemberType]
 
-    @mock.patch("paymaxis._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
+    @mock.patch(
+        "paymaxis._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout
+    )
     @pytest.mark.respx(base_url=base_url)
-    async def test_retrying_timeout_errors_doesnt_leak(self, respx_mock: MockRouter) -> None:
-        respx_mock.post("/api/v1/payments").mock(side_effect=httpx.TimeoutException("Test timeout error"))
+    async def test_retrying_timeout_errors_doesnt_leak(
+        self, respx_mock: MockRouter
+    ) -> None:
+        respx_mock.post("/api/v1/payments").mock(
+            side_effect=httpx.TimeoutException("Test timeout error")
+        )
 
         with pytest.raises(APITimeoutError):
             await self.client.post(
@@ -1573,9 +1790,13 @@ class TestAsyncPaymaxis:
 
         assert _get_open_connections(self.client) == 0
 
-    @mock.patch("paymaxis._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
+    @mock.patch(
+        "paymaxis._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout
+    )
     @pytest.mark.respx(base_url=base_url)
-    async def test_retrying_status_errors_doesnt_leak(self, respx_mock: MockRouter) -> None:
+    async def test_retrying_status_errors_doesnt_leak(
+        self, respx_mock: MockRouter
+    ) -> None:
         respx_mock.post("/api/v1/payments").mock(return_value=httpx.Response(500))
 
         with pytest.raises(APIStatusError):
@@ -1598,7 +1819,9 @@ class TestAsyncPaymaxis:
         assert _get_open_connections(self.client) == 0
 
     @pytest.mark.parametrize("failures_before_success", [0, 2, 4])
-    @mock.patch("paymaxis._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
+    @mock.patch(
+        "paymaxis._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout
+    )
     @pytest.mark.respx(base_url=base_url)
     @pytest.mark.asyncio
     @pytest.mark.parametrize("failure_mode", ["status", "exception"])
@@ -1624,17 +1847,27 @@ class TestAsyncPaymaxis:
 
         respx_mock.post("/api/v1/payments").mock(side_effect=retry_handler)
 
-        response = await client.payments.with_raw_response.create(currency="EUR", payment_type="DEPOSIT")
+        response = await client.payments.with_raw_response.create(
+            currency="EUR", payment_type="DEPOSIT"
+        )
 
         assert response.retries_taken == failures_before_success
-        assert int(response.http_request.headers.get("x-stainless-retry-count")) == failures_before_success
+        assert (
+            int(response.http_request.headers.get("x-stainless-retry-count"))
+            == failures_before_success
+        )
 
     @pytest.mark.parametrize("failures_before_success", [0, 2, 4])
-    @mock.patch("paymaxis._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
+    @mock.patch(
+        "paymaxis._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout
+    )
     @pytest.mark.respx(base_url=base_url)
     @pytest.mark.asyncio
     async def test_omit_retry_count_header(
-        self, async_client: AsyncPaymaxis, failures_before_success: int, respx_mock: MockRouter
+        self,
+        async_client: AsyncPaymaxis,
+        failures_before_success: int,
+        respx_mock: MockRouter,
     ) -> None:
         client = async_client.with_options(max_retries=4)
 
@@ -1650,17 +1883,26 @@ class TestAsyncPaymaxis:
         respx_mock.post("/api/v1/payments").mock(side_effect=retry_handler)
 
         response = await client.payments.with_raw_response.create(
-            currency="EUR", payment_type="DEPOSIT", extra_headers={"x-stainless-retry-count": Omit()}
+            currency="EUR",
+            payment_type="DEPOSIT",
+            extra_headers={"x-stainless-retry-count": Omit()},
         )
 
-        assert len(response.http_request.headers.get_list("x-stainless-retry-count")) == 0
+        assert (
+            len(response.http_request.headers.get_list("x-stainless-retry-count")) == 0
+        )
 
     @pytest.mark.parametrize("failures_before_success", [0, 2, 4])
-    @mock.patch("paymaxis._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout)
+    @mock.patch(
+        "paymaxis._base_client.BaseClient._calculate_retry_timeout", _low_retry_timeout
+    )
     @pytest.mark.respx(base_url=base_url)
     @pytest.mark.asyncio
     async def test_overwrite_retry_count_header(
-        self, async_client: AsyncPaymaxis, failures_before_success: int, respx_mock: MockRouter
+        self,
+        async_client: AsyncPaymaxis,
+        failures_before_success: int,
+        respx_mock: MockRouter,
     ) -> None:
         client = async_client.with_options(max_retries=4)
 
@@ -1676,7 +1918,9 @@ class TestAsyncPaymaxis:
         respx_mock.post("/api/v1/payments").mock(side_effect=retry_handler)
 
         response = await client.payments.with_raw_response.create(
-            currency="EUR", payment_type="DEPOSIT", extra_headers={"x-stainless-retry-count": "42"}
+            currency="EUR",
+            payment_type="DEPOSIT",
+            extra_headers={"x-stainless-retry-count": "42"},
         )
 
         assert response.http_request.headers.get("x-stainless-retry-count") == "42"
