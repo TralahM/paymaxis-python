@@ -8,7 +8,7 @@ from typing_extensions import Self, Literal, override
 
 import httpx
 
-from . import resources, _exceptions
+from . import _exceptions
 from ._qs import Querystring
 from ._types import (
     NOT_GIVEN,
@@ -24,6 +24,7 @@ from ._utils import (
     get_async_library,
 )
 from ._version import __version__
+from .resources import subscriptions
 from ._streaming import Stream as Stream, AsyncStream as AsyncStream
 from ._exceptions import PaymaxisError, APIStatusError
 from ._base_client import (
@@ -31,6 +32,7 @@ from ._base_client import (
     SyncAPIClient,
     AsyncAPIClient,
 )
+from .resources.payments import payments
 
 __all__ = [
     "ENVIRONMENTS",
@@ -38,7 +40,6 @@ __all__ = [
     "Transport",
     "ProxiesTypes",
     "RequestOptions",
-    "resources",
     "Paymaxis",
     "AsyncPaymaxis",
     "Client",
@@ -52,8 +53,8 @@ ENVIRONMENTS: Dict[str, str] = {
 
 
 class Paymaxis(SyncAPIClient):
-    payments: resources.PaymentsResource
-    subscriptions: resources.SubscriptionsResource
+    payments: payments.PaymentsResource
+    subscriptions: subscriptions.SubscriptionsResource
     with_raw_response: PaymaxisWithRawResponse
     with_streaming_response: PaymaxisWithStreamedResponse
 
@@ -135,8 +136,8 @@ class Paymaxis(SyncAPIClient):
             _strict_response_validation=_strict_response_validation,
         )
 
-        self.payments = resources.PaymentsResource(self)
-        self.subscriptions = resources.SubscriptionsResource(self)
+        self.payments = payments.PaymentsResource(self)
+        self.subscriptions = subscriptions.SubscriptionsResource(self)
         self.with_raw_response = PaymaxisWithRawResponse(self)
         self.with_streaming_response = PaymaxisWithStreamedResponse(self)
 
@@ -248,8 +249,8 @@ class Paymaxis(SyncAPIClient):
 
 
 class AsyncPaymaxis(AsyncAPIClient):
-    payments: resources.AsyncPaymentsResource
-    subscriptions: resources.AsyncSubscriptionsResource
+    payments: payments.AsyncPaymentsResource
+    subscriptions: subscriptions.AsyncSubscriptionsResource
     with_raw_response: AsyncPaymaxisWithRawResponse
     with_streaming_response: AsyncPaymaxisWithStreamedResponse
 
@@ -331,8 +332,8 @@ class AsyncPaymaxis(AsyncAPIClient):
             _strict_response_validation=_strict_response_validation,
         )
 
-        self.payments = resources.AsyncPaymentsResource(self)
-        self.subscriptions = resources.AsyncSubscriptionsResource(self)
+        self.payments = payments.AsyncPaymentsResource(self)
+        self.subscriptions = subscriptions.AsyncSubscriptionsResource(self)
         self.with_raw_response = AsyncPaymaxisWithRawResponse(self)
         self.with_streaming_response = AsyncPaymaxisWithStreamedResponse(self)
 
@@ -445,26 +446,26 @@ class AsyncPaymaxis(AsyncAPIClient):
 
 class PaymaxisWithRawResponse:
     def __init__(self, client: Paymaxis) -> None:
-        self.payments = resources.PaymentsResourceWithRawResponse(client.payments)
-        self.subscriptions = resources.SubscriptionsResourceWithRawResponse(client.subscriptions)
+        self.payments = payments.PaymentsResourceWithRawResponse(client.payments)
+        self.subscriptions = subscriptions.SubscriptionsResourceWithRawResponse(client.subscriptions)
 
 
 class AsyncPaymaxisWithRawResponse:
     def __init__(self, client: AsyncPaymaxis) -> None:
-        self.payments = resources.AsyncPaymentsResourceWithRawResponse(client.payments)
-        self.subscriptions = resources.AsyncSubscriptionsResourceWithRawResponse(client.subscriptions)
+        self.payments = payments.AsyncPaymentsResourceWithRawResponse(client.payments)
+        self.subscriptions = subscriptions.AsyncSubscriptionsResourceWithRawResponse(client.subscriptions)
 
 
 class PaymaxisWithStreamedResponse:
     def __init__(self, client: Paymaxis) -> None:
-        self.payments = resources.PaymentsResourceWithStreamingResponse(client.payments)
-        self.subscriptions = resources.SubscriptionsResourceWithStreamingResponse(client.subscriptions)
+        self.payments = payments.PaymentsResourceWithStreamingResponse(client.payments)
+        self.subscriptions = subscriptions.SubscriptionsResourceWithStreamingResponse(client.subscriptions)
 
 
 class AsyncPaymaxisWithStreamedResponse:
     def __init__(self, client: AsyncPaymaxis) -> None:
-        self.payments = resources.AsyncPaymentsResourceWithStreamingResponse(client.payments)
-        self.subscriptions = resources.AsyncSubscriptionsResourceWithStreamingResponse(client.subscriptions)
+        self.payments = payments.AsyncPaymentsResourceWithStreamingResponse(client.payments)
+        self.subscriptions = subscriptions.AsyncSubscriptionsResourceWithStreamingResponse(client.subscriptions)
 
 
 Client = Paymaxis
